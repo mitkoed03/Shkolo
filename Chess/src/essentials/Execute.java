@@ -2,7 +2,7 @@ package essentials;
 
 import pieces.*;
 
-public class Test  {
+public class Execute  {
 	
 	public static void main(String args[]) 
 	{
@@ -16,7 +16,7 @@ public class Test  {
 		{
 			for(int i = 0; i < 8; i++) 
 			{
-				if(q.moveTo(c, i, b)) 
+				if(q.moveTo(c, i, b, false)) 
 				{
 					System.out.print("|X|");
 				}

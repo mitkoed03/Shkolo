@@ -15,7 +15,7 @@ abstract public class ChessPiece {
 		m = mp;
 	}
 	
-	public boolean moveTo(int newRow, int newColumn, Board b)
+	public boolean moveTo(int newRow, int newColumn, Board b, boolean commit)
 	{
 		if(newRow < 0 || newRow > 7 || newColumn < 0 || newColumn > 7)
 			return false;
@@ -51,6 +51,9 @@ abstract public class ChessPiece {
 				column -= this.getPatt().get()[i][1];
 			}
 			
+			if(commit) {
+				this.setPosition(newRow, newColumn);
+			}
 			return true;
 		}
 		
@@ -83,6 +86,10 @@ abstract public class ChessPiece {
 		return init;
 	}
 
+	public void move() {
+		init = false;
+	}
+	
 	public MovePattern getPatt() 
 	{
 		return m;
