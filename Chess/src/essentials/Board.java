@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 
 import pieces.*;
 
+@SuppressWarnings("serial")
 public class Board extends JPanel{
 	ArrayList<ChessPiece> pieces = new ArrayList<ChessPiece>();
 	
