@@ -1,105 +1,91 @@
 package pieces;
 
-import java.awt.Color;
 
 import essentials.ChessPiece;
-import essentials.MovePattern;
 import essentials.Board;
 
 public class King extends ChessPiece{
 	
-	public King(int row, int column, boolean f) {
+	public King(int row, int column, boolean f) 
+	{
 		super(row, column, f, "K", null);
 	}
 	
-	public boolean moveTo(int newRow, int newColumn, Board b, boolean commit) {
-		int row = this.row();
-		int column = this.column();
-		
-		if(newRow < 0 || newColumn < 0 || newRow > 7 || newColumn > 7){
-			System.out.println("f1");
+	public boolean moveTo(int newRow, int newColumn, Board b, boolean commit) 
+	{
+		if(newRow < 0 || newColumn < 0 || newRow > 7 || newColumn > 7) 
+		{
 			return false;
 		}
 		
-		//Normalno
-		if(Math.abs(newRow - row) == 1 && Math.abs(newColumn - column) == 1) {
-			if(isOccupied(newRow, newColumn, b) || isDangerous(newRow, newColumn, b)) {
+		int diffRow = newRow - this.row();
+		int diffColumn = newColumn - this.column();
+		
+		//Normal
+		if(Math.abs(diffRow) <= 1 && Math.abs(diffColumn) <= 1) 
+		{
+			if(isOccupied(newRow, newColumn, b) || isDangerous(newRow, newColumn, b)) 
+			{
 				return false;
-			}else {
-				if(commit) {
+			}
+			else 
+			{
+				if(commit) 
+				{
 					this.setPosition(newRow, newColumn);
-					this.move();
 				}
 				return true;
 			}
 		}
 		
-		//Golqma Rokada
-		if(row == newRow && newColumn - column == -2 && this.isInit()) {
-			if(isDangerous(newRow, newColumn, b) || isDangerous(newRow, newColumn + 1, b) || isOccupied(newRow, newColumn, b) || isOccupied(newRow, newColumn + 1, b)) {
+		//Castling
+		if(diffRow == 0 && Math.abs(diffColumn) == 2 && this.isInit()) 
+		{
+			if(isDangerous(this.row(), this.column(), b) || isDangerous(newRow, newColumn, b) || isDangerous(newRow, newColumn - diffColumn/2, b) || isOccupied(newRow, newColumn, b) || isOccupied(newRow, newColumn - diffColumn/2 , b))
+			{
 				return false;
 			}
 			
-			for(ChessPiece cp : b.getContents()) {
-				if(cp != null) {
-					if(cp.row() == row && cp.column() == 0 && cp.color() == this.color() && cp instanceof Rook && cp.isInit() == false) {
-						if(commit) {
-							this.setPosition(newRow, newColumn);
-							this.move();
+			for(ChessPiece cp : b.getContents()) 
+			{
+				if(cp.color() == this.color() && cp instanceof Rook && cp.isInit() && cp.row() == this.row() && cp.column() == (diffColumn == 2 ? 7 : 0))
+				{
+					if(commit)
+					{
+						this.setPosition(newRow, newColumn);
 							
-							cp.setPosition(newRow, newColumn + 1);
-							cp.move();
-						}
-						return true;
+						cp.setPosition(newRow, newColumn - diffColumn/2);
 					}
+					return true;
 				}
 			}
 		}
 		
-		//Malka Rokada
-		if(row == newRow && newColumn - column == 2 && this.isInit() == false) {
-			if(isDangerous(newRow, newColumn, b) || isDangerous(newRow, newColumn - 1, b) || isOccupied(newRow, newColumn, b) || isOccupied(newRow, newColumn - 1, b)) {
-				return false;
-			}
-			
-			for(ChessPiece cp : b.getContents()) {
-				if(cp != null) {
-					if(cp.row() == row && cp.column() == 7 && cp.color() == this.color() && cp instanceof Rook && cp.isInit() == false) {
-						if(commit) {
-							this.setPosition(newRow, newColumn);
-							this.move();
-							
-							cp.setPosition(newRow, newColumn - 1);
-							cp.move();
-						}
-						return true;
-					}
-				}
-			}
-		}
 		return false;
 	}
 	
-	public boolean isDangerous(int newRow, int newColumn, Board b) {
-		for(ChessPiece cp : b.getContents()) {
-			if(cp != null) {
-				if(cp.moveTo(newRow, newColumn, b, false) == true) {
-					return true;
-				}
+	public boolean isDangerous(int newRow, int newColumn, Board b) 
+	{
+		for(ChessPiece cp : b.getContents()) 
+		{
+			if(cp.color() != this.color() && cp.moveTo(newRow, newColumn, b.modified(this.color()), false) == true ) 
+			{
+				return true;
 			}
 		}
 		return false;
 	}
 
-	public boolean isOccupied(int newRow, int newColumn, Board b) {
-		for(ChessPiece cp : b.getContents()) {
-			if(cp != null) {
-				if(cp.row() == newRow && cp.column() == newColumn && cp.color() == this.color()) {
-					return true;
-				}
+	public boolean isOccupied(int newRow, int newColumn, Board b) 
+	{
+		for(ChessPiece cp : b.getContents()) 
+		{
+			if(cp.color() == this.color() && cp.row() == newRow && cp.column() == newColumn) 
+			{
+				return true;
 			}
 		}
-		
 		return false;
 	}
+
 }
