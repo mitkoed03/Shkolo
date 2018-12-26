@@ -49,6 +49,7 @@ abstract public class ChessPiece {
 			
 			if(commit) {
 				this.setPosition(newRow, newColumn);
+				b.repaint();
 			}
 			return true;
 		}

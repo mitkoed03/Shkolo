@@ -1,56 +1,79 @@
 package essentials;
 
-import pieces.*;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class Execute  {
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class Execute extends JFrame {
+	private static Board board;
+	private static ChessPiece selected;
 	
 	public static void main(String args[]) 
 	{
-		Pawn p = new Pawn(6,3, true);
-		Rook r = new Rook(5,2, false);
+		Execute frame = new Execute();
+		frame.setVisible(true);
 		
-		Board b = new Board(p, r);
-		
-		visualize(p, b);
+		JButton b = new JButton("Move");
+		b.setSize(100, 20);
+		b.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) 
+			{
+				board.get(7, 1).moveTo(5, 0, board, true);
+			}
+			
+		});
 	}
 	
-	public static void visualize(ChessPiece c1, Board b) {
-		for(int c = 0; c < 8; c++) 
-		{
-			for(int i = 0; i < 8; i++) 
+	public Execute() {
+		board = new Board();
+		
+		setLayout(new FlowLayout());
+		setSize(new Dimension(520,717));
+		setResizable(false);
+		
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		board.setPreferredSize(new Dimension(480,480));
+		add(board);
+		
+		board.addMouseListener(new MouseAdapter() {
+			
+			public void mouseReleased(MouseEvent e) 
 			{
-				if(c1.moveTo(c, i, b, false)) 
+				if(e.getButton() == MouseEvent.BUTTON1) 
 				{
-					boolean match = false;
-					for(ChessPiece cp : b.getContents()) {
-						if(cp.row() == c && cp.column() == i) {
-							System.out.printf("|%s", cp.toString().toLowerCase());
-							match = true;
-							break;
-						}
-					}
-					
-					if(!match)
-						System.out.print("|X");
+					selected = board.get(e.getY()/60, e.getX()/60);
 				}
-				else
+				
+				if(e.getButton() == MouseEvent.BUTTON3) 
 				{
-					boolean match = false;
-					for(ChessPiece cp : b.getContents()) {
-						if(cp.row() == c && cp.column() == i) {
-							System.out.printf("|%s", cp.toString());
-							match = true;
-							break;
-						}
+					if(selected.moveTo(e.getY()/60, e.getX()/60, board, true)) 
+					{
+						board.remove(e.getY()/60, e.getX()/60, !selected.color());
+						selected = null;
 					}
-					
-					if(!match)
-						System.out.print("| ");
 				}
 			}
-			System.out.print("|");
-			System.out.println();
-		}
-		System.out.println("=================");
+		});
+		
+		JButton b = new JButton("Move");
+		b.setPreferredSize(new Dimension(100, 20));
+		b.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) 
+			{
+				board.get(7, 1).moveTo(5, 0, board, true);
+			}
+			
+		});
+		add(b);
 	}
+	
 }

@@ -8,7 +8,7 @@ public class Knight extends ChessPiece{
 
 	public Knight(int r, int c, boolean f) 
 	{
-		super(r, c, f, "K", new MovePattern(new int[] {2,1,-2,-1, 2,1,-2,-1}, new int[] {1,2,1,2, -1,-2,-1,-2}));
+		super(r, c, f, "H", new MovePattern(new int[] {2,1,-2,-1, 2,1,-2,-1}, new int[] {1,2,1,2, -1,-2,-1,-2}));
 	}
 	
 	public boolean moveTo(int newRow, int newColumn, Board b, boolean commit) 
@@ -25,6 +25,12 @@ public class Knight extends ChessPiece{
 				{
 					return false;
 				}
+			}
+			
+			if(commit) 
+			{
+				this.setPosition(newRow, newColumn);
+				b.repaint();
 			}
 			return true;
 		}

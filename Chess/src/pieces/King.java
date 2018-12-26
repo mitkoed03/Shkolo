@@ -33,6 +33,7 @@ public class King extends ChessPiece{
 				if(commit) 
 				{
 					this.setPosition(newRow, newColumn);
+					b.repaint();
 				}
 				return true;
 			}
@@ -53,8 +54,9 @@ public class King extends ChessPiece{
 					if(commit)
 					{
 						this.setPosition(newRow, newColumn);
-							
 						cp.setPosition(newRow, newColumn - diffColumn/2);
+						
+						b.repaint();
 					}
 					return true;
 				}

@@ -26,8 +26,11 @@ public class Pawn extends ChessPiece {
 				}
 			}
 			
-			if(commit)
+			if(commit) 
+			{
 				this.setPosition(newRow, newColumn);
+				b.repaint();
+			}
 			return true;
 		}
 		
@@ -41,8 +44,11 @@ public class Pawn extends ChessPiece {
 				}
 			}
 			
-			if(commit)
+			if(commit) 
+			{
 				this.setPosition(newRow, newColumn);
+				b.repaint();
+			}
 			return true;
 		}
 		
@@ -53,7 +59,10 @@ public class Pawn extends ChessPiece {
 				if(c.color() != this.color() && c .row() == newRow && c.column() == newColumn)
 				{
 					if(commit)
+					{
 						this.setPosition(newRow, newColumn);
+						b.repaint();
+					}
 					return true;
 				}
 			}
